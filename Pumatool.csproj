@@ -45,7 +45,7 @@
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
-
+ <!-- Copia de la carpeta de instalacion de office2019 -->
   <ItemGroup>
     <Content Include="Resources\Instalables\Office2019\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

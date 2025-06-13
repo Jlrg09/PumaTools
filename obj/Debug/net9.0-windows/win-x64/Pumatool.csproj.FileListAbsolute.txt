@@ -301,3 +301,6 @@ C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC
 C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Debug\net9.0-windows\win-x64\Resources\Instalables\Office2019\EULA
 C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Debug\net9.0-windows\win-x64\Resources\Instalables\Office2019\Office_Deployment_Tools_2019_-3_MLF_X22-09817(1).EXE
 C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Debug\net9.0-windows\win-x64\Resources\Instalables\Office2019\setup.exe
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Debug\net9.0-windows\win-x64\Resources\Iconos\officeClean.png
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Debug\net9.0-windows\win-x64\Resources\Iconos\pumatool.png
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Debug\net9.0-windows\win-x64\Resources\Iconos\user.png

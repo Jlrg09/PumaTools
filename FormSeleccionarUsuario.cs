@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using System.Management;
+using System.Drawing;
 
 namespace Pumatool
 {
@@ -15,10 +16,6 @@ namespace Pumatool
             InitializeComponent();
             CargarUsuariosLocales();
         }
-
-        
-
-        
 
         private void CargarUsuariosLocales()
         {
@@ -34,7 +31,6 @@ namespace Pumatool
                         string name = user["Name"].ToString();
                         string domain = user["Domain"].ToString();
 
-                        // Solo incluimos usuarios locales (descartamos dominios si es necesario)
                         if (domain == Environment.MachineName)
                         {
                             comboUsuarios.Items.Add(name);
@@ -48,8 +44,6 @@ namespace Pumatool
             }
         }
 
-
-
         private void btnAceptar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(comboUsuarios.Text))
@@ -59,6 +53,12 @@ namespace Pumatool
             }
             UsuarioSeleccionado = comboUsuarios.Text.Trim();
             this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
     }

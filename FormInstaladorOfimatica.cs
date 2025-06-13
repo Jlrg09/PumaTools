@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Pumatool
 {
     public partial class FormInstaladorOfimatica : Form
     {
+        private CheckedListBox programasList;
+        private CheckBox chkInstalacionAutomatica;
+        private Button btnInstalar;
+        private Label lblTitulo;
+        private Panel panelFondo;
+        private PictureBox picLogo;
+
         public FormInstaladorOfimatica()
         {
             InitializeComponent();
@@ -18,14 +25,46 @@ namespace Pumatool
         private void InitializeComponent()
         {
             this.Text = "Instalador de Ofimática";
-            this.Size = new System.Drawing.Size(400, 400);
+            this.Size = new Size(420, 510);
             this.StartPosition = FormStartPosition.CenterParent;
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.BackColor = Color.FromArgb(235, 237, 245);
 
-            CheckedListBox programasList = new CheckedListBox()
+            panelFondo = new Panel()
             {
-                Location = new System.Drawing.Point(20, 20),
-                Size = new System.Drawing.Size(340, 250),
-                CheckOnClick = true
+                BackColor = Color.White,
+                Size = new Size(370, 440),
+                Location = new Point(25, 25)
+            };
+            panelFondo.Region = System.Drawing.Region.FromHrgn(
+                Pumatool.FormPrincipal.CreateRoundRectRgn(0, 0, panelFondo.Width, panelFondo.Height, 20, 20));
+            this.Controls.Add(panelFondo);
+
+            picLogo = new PictureBox()
+            {
+                Image = Image.FromFile(@"Resources\Iconos\ofimatica.png"),
+                Size = new Size(50, 50),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Location = new Point(160, 10)
+            };
+            panelFondo.Controls.Add(picLogo);
+
+            lblTitulo = new Label()
+            {
+                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(54, 33, 89),
+                Text = "Instalador de Ofimática",
+                AutoSize = true,
+                Location = new Point(75, 65)
+            };
+            panelFondo.Controls.Add(lblTitulo);
+
+            programasList = new CheckedListBox()
+            {
+                Location = new Point(30, 110),
+                Size = new Size(305, 180),
+                CheckOnClick = true,
+                Font = new Font("Segoe UI", 10F)
             };
 
             programasList.Items.Add("Office 365");
@@ -37,17 +76,64 @@ namespace Pumatool
             programasList.Items.Add("PDF Pro");
             programasList.Items.Add("Visual Studio Code");
 
-            this.Controls.Add(programasList);
+            panelFondo.Controls.Add(programasList);
 
-            Button btnInstalar = new Button()
+            chkInstalacionAutomatica = new CheckBox()
+            {
+                Text = "Instalación automática (todo de golpe)",
+                Location = new Point(30, 302),
+                Size = new Size(300, 26),
+                Font = new Font("Segoe UI", 9.5F),
+                ForeColor = Color.FromArgb(60, 64, 75)
+            };
+            panelFondo.Controls.Add(chkInstalacionAutomatica);
+
+            btnInstalar = new Button()
             {
                 Text = "Instalar Seleccionados",
-                Location = new System.Drawing.Point(100, 300),
-                Size = new System.Drawing.Size(180, 40)
+                Location = new Point(90, 350),
+                Size = new Size(190, 44),
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                BackColor = Color.FromArgb(54, 33, 89),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
             };
+            btnInstalar.FlatAppearance.BorderSize = 0;
+            btnInstalar.Region = System.Drawing.Region.FromHrgn(
+                Pumatool.FormPrincipal.CreateRoundRectRgn(0, 0, btnInstalar.Width, btnInstalar.Height, 14, 14));
+            btnInstalar.Click += BtnInstalar_Click;
+            panelFondo.Controls.Add(btnInstalar);
 
-            btnInstalar.Click += (s, e) => InstalarUnoPorUno(programasList);
-            this.Controls.Add(btnInstalar);
+            // Botón cerrar
+            Button btnCerrar = new Button()
+            {
+                Text = "X",
+                Location = new Point(panelFondo.Width - 38, 8),
+                Size = new Size(30, 30),
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                ForeColor = Color.White,
+                BackColor = Color.FromArgb(231, 76, 60),
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnCerrar.FlatAppearance.BorderSize = 0;
+            btnCerrar.Click += (s, e) => this.Close();
+            panelFondo.Controls.Add(btnCerrar);
+        }
+
+        private void BtnInstalar_Click(object sender, EventArgs e)
+        {
+            if (programasList.CheckedItems.Count == 0)
+            {
+                MessageBox.Show("Selecciona al menos un programa.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (chkInstalacionAutomatica.Checked)
+                InstalarTodoDeGolpe(programasList);
+            else
+                InstalarUnoPorUno(programasList);
         }
 
         private void InstalarUnoPorUno(CheckedListBox programasList)
@@ -63,10 +149,7 @@ namespace Pumatool
                     if (programa == "Office 2019")
                     {
                         bool exito = InstalarOffice2019();
-                        if (exito)
-                            logFinal.AppendLine($"{programa}: Instalado correctamente.");
-                        else
-                            logFinal.AppendLine($"{programa}: Falló la instalación.");
+                        logFinal.AppendLine($"{programa}: {(exito ? "Instalado correctamente." : "Falló la instalación.")}");
                     }
                     else
                     {
@@ -83,15 +166,53 @@ namespace Pumatool
                             using (Process proc = Process.Start(psi))
                             {
                                 proc.WaitForExit();
-                                if (proc.ExitCode == 0)
-                                {
-                                    logFinal.AppendLine($"{programa}: Instalado correctamente.");
-                                }
-                                else
-                                {
-                                    logFinal.AppendLine($"{programa}: El instalador terminó con código {proc.ExitCode}.");
-                                }
+                                logFinal.AppendLine($"{programa}: Código de salida {proc.ExitCode}");
                             }
+                        }
+                        else
+                        {
+                            logFinal.AppendLine($"{programa}: No se encontró el instalador.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logFinal.AppendLine($"{programa}: Error -> {ex.Message}");
+                }
+            }
+
+            MessageBox.Show(logFinal.ToString(), "Resumen de Instalación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void InstalarTodoDeGolpe(CheckedListBox programasList)
+        {
+            StringBuilder logFinal = new StringBuilder();
+
+            foreach (var item in programasList.CheckedItems)
+            {
+                string programa = item.ToString();
+
+                try
+                {
+                    if (programa == "Office 2019")
+                    {
+                        bool exito = InstalarOffice2019();
+                        logFinal.AppendLine($"{programa}: {(exito ? "Instalado correctamente." : "Falló la instalación.")}");
+                    }
+                    else
+                    {
+                        string ruta = ObtenerRutaPrograma(programa);
+                        if (File.Exists(ruta))
+                        {
+                            ProcessStartInfo psi = new ProcessStartInfo()
+                            {
+                                FileName = ruta,
+                                UseShellExecute = true,
+                                Verb = "runas"
+                            };
+
+                            Process proc = Process.Start(psi);
+                            logFinal.AppendLine($"{programa}: Instalación iniciada.");
                         }
                         else
                         {
@@ -131,13 +252,11 @@ namespace Pumatool
                 string origen = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Resources\Instalables\Office2019");
                 string destino = @"C:\Office2019";
 
-                // Si ya existe, eliminamos primero la carpeta destino
                 if (Directory.Exists(destino))
                     Directory.Delete(destino, true);
 
                 CopiarDirectorio(origen, destino);
 
-                // Ejecutar setup /configure configuracion.xml
                 string setupPath = Path.Combine(destino, "setup.exe");
                 string configPath = Path.Combine(destino, "configuracion.xml");
 
@@ -159,7 +278,6 @@ namespace Pumatool
                 using (Process proc = Process.Start(psi))
                 {
                     proc.WaitForExit();
-
                     if (proc.ExitCode != 0)
                     {
                         MessageBox.Show($"La instalación de Office 2019 terminó con código {proc.ExitCode}.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -167,7 +285,6 @@ namespace Pumatool
                     }
                 }
 
-                // Limpiar la carpeta temporal
                 Directory.Delete(destino, true);
                 return true;
             }

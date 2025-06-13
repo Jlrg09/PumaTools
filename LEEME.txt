@@ -1,0 +1,95 @@
+PumaTool - Instalador de Ofimática y Optimizador de Windows
+
+===========================================
+DESCRIPCIÓN GENERAL
+===========================================
+
+Este programa permite:
+
+- Restaurar usuarios de Windows.
+- Optimizar Windows 10 y 11 para mejorar rendimiento.
+- Instalar paquetes de ofimática y herramientas de productividad.
+- Personalizar la posición de la barra de tareas de Windows 11.
+- Realizar limpieza de archivos temporales.
+
+===========================================
+PREPARACIÓN DE LOS ARCHIVOS DE INSTALACIÓN
+===========================================
+
+Antes de ejecutar el programa, debe preparar la siguiente estructura de carpetas:
+
+- Dentro del directorio donde se encuentra el ejecutable, debe crear la siguiente ruta:
+
+  Resources\Instalables\
+
+- Allí debe colocar los instaladores de los programas con los siguientes nombres exactos:
+
+  - Office 365  →  office365.exe
+  - Office 2019 → (Carpeta completa, ver abajo)
+  - Chrome      →  chrome.exe
+  - Firefox     →  firefox.exe
+  - Brave       →  brave.exe
+  - Adobe       →  adobe.exe
+  - PDF Pro     →  pdfpro.exe
+  - Visual Studio Code → vscode.exe
+
+IMPORTANTE:
+
+- Para Office 2019 debe copiar dentro de:
+  Resources\Instalables\Office2019\
+
+- Dentro de esa carpeta deben estar:
+  - setup.exe
+  - configuracion.xml
+  - (Todos los archivos adicionales requeridos por el instalador de Office 2019)
+
+- La estructura debe quedar así:
+  
+  Resources\Instalables\Office2019\setup.exe
+  Resources\Instalables\Office2019\configuracion.xml
+  Resources\Instalables\Office2019\otros_archivos...
+
+===========================================
+EJECUCIÓN DEL PROGRAMA
+===========================================
+
+- Ejecute el archivo PumaTool.exe como Administrador.
+- Desde el menú principal podrá acceder a cada una de las funciones:
+  - Restaurar usuario
+  - Optimizar Windows 10 y 11
+  - Instalar Ofimática
+  - Cambiar posición del botón de inicio (Windows 11)
+  - Limpiar temporales
+  - Solucionar problemas de instalacion de office (Proximamente)
+
+===========================================
+REQUISITOS DEL SISTEMA
+===========================================
+
+- Sistema Operativo: Windows
+- Permisos de administrador
+
+===========================================
+TÉRMINOS DE USO Y DERECHOS DE AUTOR
+===========================================
+
+PumaTool © José Romero 2025.  
+Todos los derechos reservados.
+
+Este software ha sido desarrollado para uso exclusivo en entornos profesionales de soporte técnico, reparación o administración de sistemas.  
+
+Queda estrictamente prohibida su venta, redistribución o uso con fines comerciales o de lucro sin autorización expresa del autor.
+
+El autor no se hace responsable por daños, pérdidas de información, o mal uso del software por parte de terceros.
+
+Cualquier modificación, adaptación o distribución debe contar con el permiso explícito del autor.
+
+===========================================
+SOPORTE TÉCNICO
+===========================================
+
+PumaTool desarrollado por:
+José Romero - Grupo TIC UNIVERSIDAD DEL MAGDALENA
+Contacto: Joseromerolg@unimagdalena.edu.co
+
+===========================================

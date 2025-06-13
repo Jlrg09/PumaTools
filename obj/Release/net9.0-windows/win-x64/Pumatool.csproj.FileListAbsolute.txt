@@ -293,3 +293,14 @@ C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC
 C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Iconos\optimizarW11.png
 C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Iconos\restaurarUsuario.png
 C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Iconos\pumatool.ico
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Instalables\Office2019\configuracion.xml
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Instalables\Office2019\configuration-Office2019Enterprise.xml
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Instalables\Office2019\configuration-Office365-x64.xml
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Instalables\Office2019\configuration-Office365-x86.xml
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Instalables\Office2019\EULA
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Instalables\Office2019\Office_Deployment_Tools_2019_-3_MLF_X22-09817(1).EXE
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Instalables\Office2019\setup.exe
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\obj\Release\net9.0-windows\win-x64\Pumatool.sourcelink.json
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Iconos\officeClean.png
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Iconos\pumatool.png
+C:\Users\invitado_contra_1234\Documents\José Romero\Trabajo\Soporte Tecnico TIC\Proyect\Pumatool\bin\Release\net9.0-windows\win-x64\Resources\Iconos\user.png
