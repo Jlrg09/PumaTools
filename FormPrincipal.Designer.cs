@@ -14,16 +14,15 @@ namespace Pumatool
         private Button btnMaximizar;
         private Button btnCerrar;
 
-        private Panel panelWindows10;
-        private Panel panelWindows11;
+        private Panel panelWindows;
         private Panel panelGenerales;
-        private Button btnLimpiarRegistrosOffice;
-        private Button btnOptimizarW10;
-        private Button btnOptimizarW11;
+        private Button btnOptimizarWindows;
         private Button btnInicioIzquierda;
+        private Button btnLimpiarRegistrosOffice;
         private Button btnLimpiarTemporales;
         private Button btnRestaurarUsuario;
         private Button btnInstalarOfimatica;
+        private Button btnCrearUsuario;
 
         protected override void Dispose(bool disposing)
         {
@@ -108,56 +107,37 @@ namespace Pumatool
             this.btnCerrar.Click += BtnCerrar_Click;
             this.panelBarraSuperior.Controls.Add(this.btnCerrar);
 
-            // PANEL WINDOWS 10
-            this.panelWindows10 = new Panel();
-            this.panelWindows10.BackColor = Color.White;
-            this.panelWindows10.BorderStyle = BorderStyle.None;
-            this.panelWindows10.Location = new Point(32, 80);
-            this.panelWindows10.Size = new Size(245, 112);
-            this.panelWindows10.Region = Region.FromHrgn(
-                Pumatool.FormPrincipal.CreateRoundRectRgn(0, 0, this.panelWindows10.Width, this.panelWindows10.Height, 16, 16));
-            this.Controls.Add(this.panelWindows10);
+            // PANEL WINDOWS (Unificado para optimización automática)
+            this.panelWindows = new Panel();
+            this.panelWindows.BackColor = Color.White;
+            this.panelWindows.BorderStyle = BorderStyle.None;
+            this.panelWindows.Location = new Point(32, 80);
+            this.panelWindows.Size = new Size(500, 160);
+            this.panelWindows.Region = Region.FromHrgn(
+                Pumatool.FormPrincipal.CreateRoundRectRgn(0, 0, this.panelWindows.Width, this.panelWindows.Height, 16, 16));
+            this.Controls.Add(this.panelWindows);
 
-            Label lblW10 = CrearEtiquetaPanel("Windows 10", 14, 10, Color.FromArgb(33, 150, 243));
-            this.panelWindows10.Controls.Add(lblW10);
+            Label lblWin = CrearEtiquetaPanel("Optimización de Windows", 14, 10, Color.FromArgb(33, 150, 243));
+            this.panelWindows.Controls.Add(lblWin);
 
-            this.btnOptimizarW10 = new Button();
-            FormatearBoton(this.btnOptimizarW10, "Optimizar Windows 10", 50);
-            this.btnOptimizarW10.Image = Image.FromFile(@"Resources\Iconos\optimizarW10.png");
-            this.btnOptimizarW10.Click += new System.EventHandler(this.btnOptimizarWindows_Click);
-            this.panelWindows10.Controls.Add(this.btnOptimizarW10);
-
-            // PANEL WINDOWS 11
-            this.panelWindows11 = new Panel();
-            this.panelWindows11.BackColor = Color.White;
-            this.panelWindows11.BorderStyle = BorderStyle.None;
-            this.panelWindows11.Location = new Point(287, 80);
-            this.panelWindows11.Size = new Size(245, 160);
-            this.panelWindows11.Region = Region.FromHrgn(
-                Pumatool.FormPrincipal.CreateRoundRectRgn(0, 0, this.panelWindows11.Width, this.panelWindows11.Height, 16, 16));
-            this.Controls.Add(this.panelWindows11);
-
-            Label lblW11 = CrearEtiquetaPanel("Windows 11", 14, 10, Color.FromArgb(0, 200, 83));
-            this.panelWindows11.Controls.Add(lblW11);
-
-            this.btnOptimizarW11 = new Button();
-            FormatearBoton(this.btnOptimizarW11, "Optimizar Windows 11", 50);
-            this.btnOptimizarW11.Image = Image.FromFile(@"Resources\Iconos\optimizarW11.png");
-            this.btnOptimizarW11.Click += new System.EventHandler(this.btnOptimizarWindows11_Click);
-            this.panelWindows11.Controls.Add(this.btnOptimizarW11);
+            this.btnOptimizarWindows = new Button();
+            FormatearBoton(this.btnOptimizarWindows, "Optimizar Windows", 50);
+            this.btnOptimizarWindows.Image = Image.FromFile(@"Resources\Iconos\optimizarW10.png");
+            this.btnOptimizarWindows.Click += new System.EventHandler(this.btnOptimizarWindows_Click);
+            this.panelWindows.Controls.Add(this.btnOptimizarWindows);
 
             this.btnInicioIzquierda = new Button();
             FormatearBoton(this.btnInicioIzquierda, "Inicio a la izquierda", 92);
             this.btnInicioIzquierda.Image = Image.FromFile(@"Resources\Iconos\inicioIzquierda.png");
             this.btnInicioIzquierda.Click += (s, e) => PonerInicioIzquierda();
-            this.panelWindows11.Controls.Add(this.btnInicioIzquierda);
+            this.panelWindows.Controls.Add(this.btnInicioIzquierda);
 
             // PANEL GENERALES
             this.panelGenerales = new Panel();
             this.panelGenerales.BackColor = Color.White;
             this.panelGenerales.BorderStyle = BorderStyle.None;
             this.panelGenerales.Location = new Point(542, 80);
-            this.panelGenerales.Size = new Size(245, 336);
+            this.panelGenerales.Size = new Size(245, 378);
             this.panelGenerales.Region = Region.FromHrgn(
                 Pumatool.FormPrincipal.CreateRoundRectRgn(0, 0, this.panelGenerales.Width, this.panelGenerales.Height, 16, 16));
             this.Controls.Add(this.panelGenerales);
@@ -194,6 +174,17 @@ namespace Pumatool
             this.btnLimpiarRegistrosOffice.Image = Image.FromFile(@"Resources\Iconos\officeClean.png");
             this.btnLimpiarRegistrosOffice.Click += (s, e) => LimpiarRegistrosOffice();
             this.panelGenerales.Controls.Add(this.btnLimpiarRegistrosOffice);
+            botonY += espacio;
+
+            this.btnCrearUsuario = new Button();
+            FormatearBoton(this.btnCrearUsuario, "Crear Usuario", botonY);
+            this.btnCrearUsuario.Image = Image.FromFile(@"Resources\Iconos\userCreate.png");
+            this.btnCrearUsuario.Click += (s, e) =>
+            {
+                var f = new FormUsuarioNuevo();
+                f.ShowDialog();
+            };
+            this.panelGenerales.Controls.Add(this.btnCrearUsuario);
         }
 
         private Label CrearEtiquetaPanel(string texto, int x, int y, Color color)

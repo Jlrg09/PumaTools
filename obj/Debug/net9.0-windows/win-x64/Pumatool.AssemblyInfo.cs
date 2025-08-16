@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Pumatool")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+78b78ff7e737058130079487ddc117a239be995f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8e9e83080cabeb6ac97c9f5b53ed4b2088c06305")]
 [assembly: System.Reflection.AssemblyProductAttribute("Pumatool")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Pumatool")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -53,7 +53,7 @@ namespace Pumatool
                     using (var carga = new FormPantallaCarga())
                     {
                         carga.Show();
-                        Application.DoEvents(); // Muestra la pantalla antes de iniciar
+                        Application.DoEvents();
                         RestaurarUsuario(seleccionar.UsuarioSeleccionado, carga);
                         carga.Close();
                     }
@@ -83,7 +83,6 @@ namespace Pumatool
                 UnloadUserProfileRegistryHive(usuario);
 
                 Mensaje("Eliminando carpetas de perfil...");
-                // 1. Eliminar TODAS las carpetas que comiencen con el nombre del usuario en C:\Users
                 string usuariosPath = @"C:\Users";
                 if (Directory.Exists(usuariosPath))
                 {
@@ -104,7 +103,6 @@ namespace Pumatool
                 }
 
                 Mensaje("Eliminando claves de registro del perfil...");
-                // 2. Eliminar todas las claves de ProfileList que apunten a alguna de esas carpetas
                 string keyPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList";
                 using (RegistryKey profileListKey = Registry.LocalMachine.OpenSubKey(keyPath, true))
                 {
@@ -132,14 +130,12 @@ namespace Pumatool
                 }
 
                 Mensaje("Eliminando cuentas de usuario...");
-                // 3. Eliminar el usuario y todas sus cuentas variantes (Ej: Usuario, Usuario.PCNAME, etc)
                 foreach (var nombre in ObtenerUsuariosWindows(usuario))
                 {
                     EjecutarComando($"net user \"{nombre}\" /delete");
                 }
 
                 Mensaje("Creando cuenta de usuario limpia...");
-                // 4. Crear el usuario "limpio"
                 EjecutarComando($"net user \"{usuario}\" \"\" /add");
                 EjecutarComando($"net localgroup Users \"{usuario}\" /add");
 
@@ -155,7 +151,6 @@ namespace Pumatool
             }
         }
 
-        // Mata todos los procesos del usuario antes de intentar borrar la carpeta
         private void KillProcesosUsuario(string username)
         {
             try
@@ -165,7 +160,7 @@ namespace Pumatool
                 {
                     try
                     {
-                        if (proc.SessionId == 0) continue; // Sistema
+                        if (proc.SessionId == 0) continue;
                         string owner = GetProcessOwner(proc.Id);
                         if (!string.IsNullOrEmpty(owner) && owner.Equals(username, StringComparison.OrdinalIgnoreCase))
                         {
@@ -178,7 +173,6 @@ namespace Pumatool
             catch { }
         }
 
-        // Obtiene el usuario propietario de un proceso
         private string GetProcessOwner(int processId)
         {
             try
@@ -197,7 +191,6 @@ namespace Pumatool
             return null;
         }
 
-        // Desmonta el hive del perfil de usuario si quedó enganchado (por ejemplo, ntuser.dat)
         private void UnloadUserProfileRegistryHive(string username)
         {
             try
@@ -225,13 +218,11 @@ namespace Pumatool
             catch { }
         }
 
-        // Cambia los permisos de todos los archivos/carpetas dentro de la carpeta
         private void ForzarPermisosRecursivo(string dir)
         {
             EjecutarComando($"icacls \"{dir}\" /grant Administrators:F /T /C /Q");
         }
 
-        // Elimina carpetas incluso si hay archivos solo lectura, ocultos, bloqueados, etc. usando métodos nativos y fallback a cmd
         private void EliminarDirectorioForzado(string ruta)
         {
             try
@@ -254,7 +245,6 @@ namespace Pumatool
             }
         }
 
-        // Quita atributos solo lectura y oculto a todo el contenido de la carpeta
         private void QuitarSoloLecturaOculto(string ruta)
         {
             foreach (string file in Directory.GetFiles(ruta, "*", SearchOption.AllDirectories))
@@ -416,9 +406,11 @@ namespace Pumatool
         {
             try
             {
-                string rutaTemp = Path.Combine(Path.GetTempPath(), "OptimizarWindows10.bat");
+                string version = ObtenerVersionWindows();
+                string script = version == "11" ? ObtenerScriptOptimizarWindows11() : ObtenerScriptOptimizar();
 
-                File.WriteAllText(rutaTemp, ObtenerScriptOptimizar());
+                string rutaTemp = Path.Combine(Path.GetTempPath(), "OptimizarWindows.bat");
+                File.WriteAllText(rutaTemp, script);
 
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
@@ -430,38 +422,22 @@ namespace Pumatool
                 proceso.WaitForExit();
 
                 File.Delete(rutaTemp);
-                MessageBox.Show("Optimización completada correctamente.", "Optimización", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Optimización de Windows {version} completada correctamente.", "Optimización", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al ejecutar optimización: " + ex.Message);
             }
         }
-        private void btnOptimizarWindows11_Click(object sender, EventArgs e)
+
+        private string ObtenerVersionWindows()
         {
-            try
-            {
-                string rutaTemp = Path.Combine(Path.GetTempPath(), "OptimizarWindows11.bat");
-
-                File.WriteAllText(rutaTemp, ObtenerScriptOptimizarWindows11());
-
-                ProcessStartInfo psi = new ProcessStartInfo
-                {
-                    FileName = rutaTemp,
-                    UseShellExecute = true,
-                    Verb = "runas"
-                };
-                Process proceso = Process.Start(psi);
-                proceso.WaitForExit();
-
-                File.Delete(rutaTemp);
-                MessageBox.Show("Optimización de Windows 11 completada correctamente.", "Optimización", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al ejecutar optimización: " + ex.Message);
-            }
+            string productName = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName", "");
+            if (productName.Contains("Windows 11")) return "11";
+            if (productName.Contains("Windows 10")) return "10";
+            return "Otro";
         }
+
         private string ObtenerScriptOptimizar()
         {
             return @"@echo off
@@ -545,6 +521,7 @@ namespace Pumatool
         echo ========================================
         pause";
         }
+
         private string ObtenerScriptOptimizarWindows11()
         {
             return @"@echo off

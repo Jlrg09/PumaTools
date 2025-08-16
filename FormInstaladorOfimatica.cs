@@ -13,6 +13,7 @@ namespace Pumatool
         private CheckedListBox programasList;
         private CheckBox chkInstalacionAutomatica;
         private Button btnInstalar;
+        private Button btnAgregarPrograma;
         private Label lblTitulo;
         private Panel panelFondo;
         private PictureBox picLogo;
@@ -20,12 +21,13 @@ namespace Pumatool
         public FormInstaladorOfimatica()
         {
             InitializeComponent();
+            CargarProgramas();
         }
 
         private void InitializeComponent()
         {
             this.Text = "Instalador de Ofimática";
-            this.Size = new Size(420, 510);
+            this.Size = new Size(420, 580);
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.None;
             this.BackColor = Color.FromArgb(235, 237, 245);
@@ -33,11 +35,11 @@ namespace Pumatool
             panelFondo = new Panel()
             {
                 BackColor = Color.White,
-                Size = new Size(370, 440),
+                Size = new Size(370, 510),
                 Location = new Point(25, 25)
             };
             panelFondo.Region = System.Drawing.Region.FromHrgn(
-                Pumatool.FormPrincipal.CreateRoundRectRgn(0, 0, panelFondo.Width, panelFondo.Height, 20, 20));
+                Pumatool.FormPrincipal.CreateRoundRectRgn(0, 0, 370, 510, 20, 20));
             this.Controls.Add(panelFondo);
 
             picLogo = new PictureBox()
@@ -62,26 +64,16 @@ namespace Pumatool
             programasList = new CheckedListBox()
             {
                 Location = new Point(30, 110),
-                Size = new Size(305, 180),
+                Size = new Size(305, 220),
                 CheckOnClick = true,
                 Font = new Font("Segoe UI", 10F)
             };
-
-            programasList.Items.Add("Office 365");
-            programasList.Items.Add("Office 2019");
-            programasList.Items.Add("Chrome");
-            programasList.Items.Add("Firefox");
-            programasList.Items.Add("Brave");
-            programasList.Items.Add("Adobe");
-            programasList.Items.Add("PDF Pro");
-            programasList.Items.Add("Visual Studio Code");
-
             panelFondo.Controls.Add(programasList);
 
             chkInstalacionAutomatica = new CheckBox()
             {
                 Text = "Instalación automática (todo de golpe)",
-                Location = new Point(30, 302),
+                Location = new Point(30, 340),
                 Size = new Size(300, 26),
                 Font = new Font("Segoe UI", 9.5F),
                 ForeColor = Color.FromArgb(60, 64, 75)
@@ -91,7 +83,7 @@ namespace Pumatool
             btnInstalar = new Button()
             {
                 Text = "Instalar Seleccionados",
-                Location = new Point(90, 350),
+                Location = new Point(90, 385),
                 Size = new Size(190, 44),
                 Font = new Font("Segoe UI", 11F, FontStyle.Bold),
                 BackColor = Color.FromArgb(54, 33, 89),
@@ -101,11 +93,30 @@ namespace Pumatool
             };
             btnInstalar.FlatAppearance.BorderSize = 0;
             btnInstalar.Region = System.Drawing.Region.FromHrgn(
-                Pumatool.FormPrincipal.CreateRoundRectRgn(0, 0, btnInstalar.Width, btnInstalar.Height, 14, 14));
+                Pumatool.FormPrincipal.CreateRoundRectRgn(0, 0, 190, 44, 14, 14));
             btnInstalar.Click += BtnInstalar_Click;
             panelFondo.Controls.Add(btnInstalar);
 
-            // Botón cerrar
+            btnAgregarPrograma = new Button()
+            {
+                Text = "Agregar Programa Nuevo",
+                Location = new Point(90, 445),
+                Size = new Size(190, 38),
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                BackColor = Color.FromArgb(33, 89, 54),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+            btnAgregarPrograma.FlatAppearance.BorderSize = 0;
+            btnAgregarPrograma.Click += (s, e) =>
+            {
+                var f = new Pumatool.AddProgramForm();
+                f.ShowDialog();
+                CargarProgramas();
+            };
+            panelFondo.Controls.Add(btnAgregarPrograma);
+
             Button btnCerrar = new Button()
             {
                 Text = "X",
@@ -120,6 +131,14 @@ namespace Pumatool
             btnCerrar.FlatAppearance.BorderSize = 0;
             btnCerrar.Click += (s, e) => this.Close();
             panelFondo.Controls.Add(btnCerrar);
+        }
+
+        private void CargarProgramas()
+        {
+            programasList.Items.Clear();
+            var programas = ProgramDownloader.CargarProgramas();
+            foreach (var prog in programas)
+                programasList.Items.Add(prog.Nombre);
         }
 
         private void BtnInstalar_Click(object sender, EventArgs e)
@@ -142,7 +161,7 @@ namespace Pumatool
 
             foreach (var item in programasList.CheckedItems)
             {
-                string programa = item.ToString();
+                string programa = item?.ToString() ?? "";
 
                 try
                 {
@@ -154,7 +173,7 @@ namespace Pumatool
                     else
                     {
                         string ruta = ObtenerRutaPrograma(programa);
-                        if (File.Exists(ruta))
+                        if (!string.IsNullOrWhiteSpace(ruta) && File.Exists(ruta))
                         {
                             ProcessStartInfo psi = new ProcessStartInfo()
                             {
@@ -190,7 +209,7 @@ namespace Pumatool
 
             foreach (var item in programasList.CheckedItems)
             {
-                string programa = item.ToString();
+                string programa = item?.ToString() ?? "";
 
                 try
                 {
@@ -202,7 +221,7 @@ namespace Pumatool
                     else
                     {
                         string ruta = ObtenerRutaPrograma(programa);
-                        if (File.Exists(ruta))
+                        if (!string.IsNullOrWhiteSpace(ruta) && File.Exists(ruta))
                         {
                             ProcessStartInfo psi = new ProcessStartInfo()
                             {
@@ -231,18 +250,20 @@ namespace Pumatool
 
         private string ObtenerRutaPrograma(string programa)
         {
-            string recursos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/Instalables");
-            switch (programa)
+            var lista = ProgramDownloader.CargarProgramas();
+            var info = lista.Find(x => x.Nombre == programa);
+            if (info == null) return "";
+            string ruta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Instalables", info.Ejecutable);
+
+            if (!File.Exists(ruta) && !string.IsNullOrEmpty(info.Url))
             {
-                case "Office 365": return Path.Combine(recursos, "office365.exe");
-                case "Chrome": return Path.Combine(recursos, "chrome.exe");
-                case "Firefox": return Path.Combine(recursos, "firefox.exe");
-                case "Brave": return Path.Combine(recursos, "brave.exe");
-                case "Adobe": return Path.Combine(recursos, "adobe.exe");
-                case "PDF Pro": return Path.Combine(recursos, "pdfpro.exe");
-                case "Visual Studio Code": return Path.Combine(recursos, "vscode.exe");
-                default: return "";
+                bool descargado = ProgramDownloader.DescargarPrograma(info);
+                if (!descargado)
+                {
+                    MessageBox.Show("No se pudo descargar el instalador, agréguelo manualmente en la carpeta.", "Instalador faltante", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
+            return ruta;
         }
 
         private bool InstalarOffice2019()
